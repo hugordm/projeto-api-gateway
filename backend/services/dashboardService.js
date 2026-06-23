@@ -9,16 +9,20 @@ const MOEDAS_URL = process.env.MOEDAS_URL || "";
 
 async function getDashboard(req, res) {
     try {
-        const [climaResponse, moedasResponse] = await Promise.all([
+        const [climaResult, moedasResult] = await Promise.allSettled([
             axios.get(CLIMA_URL),
             axios.get(MOEDAS_URL)
         ]);
 
-        const clima = climaResponse.data;
-        const moedas = moedasResponse.data;
+        const clima = climaResult.status === "fulfilled" ? climaResult.value.data : null;
+        const moedas = moedasResult.status === "fulfilled" ? moedasResult.value.data : null;
+
+        const avisos = [];
+        if (!clima) avisos.push("Dados de clima indisponíveis");
+        if (!moedas) avisos.push("Dados de moedas indisponíveis");
 
         // TODO: ajustar os campos abaixo após Hugo Correia enviar o JSON das APIs
-        const resumo = `Temperatura: ${clima.CAMPO_AQUI}, Dolar: ${moedas.CAMPO_AQUI}`;
+        const resumo = `Temperatura: ${clima ? clima.CAMPO_AQUI : "indisponível"}, Dolar: ${moedas ? moedas.CAMPO_AQUI : "indisponível"}`;
 
         const mensagem = await client.messages.create({
             model: "claude-haiku-4-5-20251001",
@@ -34,7 +38,8 @@ async function getDashboard(req, res) {
         res.json({
             clima,
             moedas,
-            insight
+            insight,
+            avisos
         });
 
     } catch (error) {
