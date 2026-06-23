@@ -18,7 +18,6 @@ function Dashboard() {
         async function buscarDashboard() {
             try {
                 setLoading(true);
-
                 const response = await axios.get("/api/dashboard");
                 const result = response.data;
 
