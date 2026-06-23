@@ -1,60 +1,68 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from 'react';
+import Banner from './Banner';
+import CardClima from './CardClima';
+import CardMoeda from './CardMoeda';
 
-const testData = {
-    "cidade": "são paulo",
-    "temp": "20C",
-    "dolar": 5.50,
-    "insight": "Hoje chove em SP e o dólar subiu, talvez seja melhor investir no mercado interno."
-}
+const dadosFicticios = {
+  insight:
+    'O dólar apresentou uma valorização sutil frente ao real nesta manhã devido ao cenário externo. Paralelamente, a previsão do tempo para a sua região indica estabilidade com ventos moderados. Cenário ideal para negociações de commodities.',
+  cidade: 'São Paulo, BR',
+  temp: '26°C',
+  dolar: '5.42',
+};
 
 function Dashboard() {
-    //const [data, setData] = useState(testData);
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [erro, setErro] = useState(null);
+  const [data, setData] = useState(dadosFicticios);
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState(null);
 
-    useEffect(() => {
-        async function buscarDashboard() {
-            try {
-                setLoading(true);
-                const response = await axios.get("/api/dashboard");
-                const result = response.data;
+  /* useEffect(() => {
+    async function buscarDashboard() {
+      try {
+        setLoading(true);
+        const response = await axios.get('/api/dashboard');
+        const result = response.data;
 
-                setData(result)
-            } catch (error) {
-                setErro(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        buscarDashboard();
-    }, []);
-
-    if (loading) {
-        return <p>Carregando...</p>;
+        setData(result);
+      } catch (error) {
+        setErro(error.message);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    if (erro) {
-        return <p>{erro}</p>;
-    }
+    buscarDashboard();
+  }, []); */
 
+  if (loading) {
     return (
-        <div className="grid grid-rows-[70px_1fr_1fr]  border-2 rounded-2xl w-2xl aspect-square">
-            <h2 className="border-b-2 border-dashed">Dashboard</h2>
-            <p className="border-b-2 border-dashed">Insight: {data.insight}</p> 
-
-            <div className="grid grid-cols-3 gap-0.5 justify-center">
-
-                <p>Cidade: {data.cidade}</p> 
-
-                <p>Temperatura: {data.temp}</p> 
-
-                <p>Moeda: {data.dolar}</p> 
-            </div>
-        </div>
+      <div className="w-full max-w-4xl bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex justify-center items-center min-h-75">
+        <p>Carregando...</p>
+      </div>
     );
+  }
+
+  if (erro) {
+    return (
+      <div className="p-4 bg-red-50 text-red-600 rounded-xl border border-red-200 w-full max-w-4xl">
+        <p>{erro}</p>
+      </div>
+    );
+  }
+
+  if (!data) return null;
+
+  return (
+    <div className="w-full max-w-4xl bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-6">
+      <Banner insight={data.insight} />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <CardClima cidade={data.cidade} temp={data.temp} />
+
+        <CardMoeda dolar={data.dolar} />
+      </div>
+    </div>
+  );
 }
 
 export default Dashboard;
