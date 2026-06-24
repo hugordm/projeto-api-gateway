@@ -4,6 +4,7 @@ import axios from 'axios';
 import CardClima from './CardClima';
 import CardMoeda from './CardMoeda';
 import GeradorInsight from './GeradorInsight';
+import Calendar from './Calendario';
 
 function Dashboard() {
   const [data, setData] = useState(null);
@@ -158,6 +159,7 @@ function Dashboard() {
 
         <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
           🌤️ Clima e Tempo nas Cidades Selecionadas
+          
         </h2>
 
 
@@ -170,7 +172,11 @@ function Dashboard() {
             />
           ))}
 
+          <Calendar />
+
         </div>
+
+
 
       </div>
 
