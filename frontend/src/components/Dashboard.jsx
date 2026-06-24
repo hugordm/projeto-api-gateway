@@ -2,7 +2,6 @@ import { useState } from 'react';
 import CardClima from './CardClima';
 import CardMoeda from './CardMoeda';
 import GeradorInsight from './GeradorInsight';
-import Calendar from './Calendario';
 
 const dadosFicticios = {
   insight:
@@ -91,9 +90,6 @@ function Dashboard() {
   }
 
   if (!data) return null;
-
-
-  const [showCalendar, setShowCalendar] = useState(false);
 
 
   return (
