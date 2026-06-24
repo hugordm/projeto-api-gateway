@@ -60,8 +60,7 @@ export default function Calendar() {
   const isHoliday = (day) => {
     const date = new Date(year, month, day);
 
-    const formatted = date
-      .toLocaleDateString("sv-SE");
+    const formatted = date.toLocaleDateString("sv-SE");
 
     return holidays.find(
       (holiday) => holiday.date === formatted
@@ -79,36 +78,83 @@ export default function Calendar() {
   }
 
   while (days.length < 42) {
-  days.push(null);
-}
+    days.push(null);
+  }
 
   return (
-    <div className="w-60 rounded-2xl bg-white p-3 shadow-lg">
+    <div
+      className="
+        w-full
+        rounded-2xl
+        bg-slate-800
+        border
+        border-slate-700
+        p-4
+        shadow-lg
+        text-slate-200
+      "
+    >
+
       {/* Cabeçalho */}
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-lg font-semibold capitalize">
-          {monthName}
+      <div className="mb-4 flex items-center justify-between">
+
+        <h2 className="
+          text-lg
+          font-bold
+          capitalize
+        ">
+          📅 {monthName}
         </h2>
 
-        <div className="flex gap-2">
+        <div className="flex gap-1">
+
           <button
             onClick={previousMonth}
-            className="rounded p-1 hover:bg-gray-100"
+            className="
+              rounded-lg
+              px-2
+              py-1
+              text-slate-400
+              hover:bg-slate-700
+              hover:text-white
+              transition
+            "
           >
             ←
           </button>
 
           <button
             onClick={nextMonth}
-            className="rounded p-1 hover:bg-gray-100"
+            className="
+              rounded-lg
+              px-2
+              py-1
+              text-slate-400
+              hover:bg-slate-700
+              hover:text-white
+              transition
+            "
           >
             →
           </button>
+
         </div>
+
       </div>
 
+
       {/* Dias da semana */}
-      <div className="mb-3 grid grid-cols-7 text-center text-sm text-gray-400">
+      <div
+        className="
+          mb-3
+          grid
+          grid-cols-7
+          text-center
+          text-xs
+          font-medium
+          text-slate-400
+        "
+      >
         <span>Dom</span>
         <span>Seg</span>
         <span>Ter</span>
@@ -118,9 +164,12 @@ export default function Calendar() {
         <span>Sáb</span>
       </div>
 
+
       {/* Dias */}
-      <div className="grid grid-cols-7 gap-y-1">
+      <div className="grid grid-cols-7 gap-y-2">
+
         {days.map((day, index) => {
+
           if (!day) {
             return <div key={index}></div>;
           }
@@ -128,51 +177,83 @@ export default function Calendar() {
           const holiday = isHoliday(day);
 
           return (
+
             <button
               key={index}
               title={holiday?.name || ""}
               onClick={() => setSelectedDay(day)}
+
               className={`
-                mx-auto flex h-6 w-6 items-center justify-center rounded-full text-sm transition
+                mx-auto
+                flex
+                h-7
+                w-7
+                items-center
+                justify-center
+                rounded-full
+                text-sm
+                transition
 
                 ${
                   selectedDay === day
-                    ? "bg-orange-500 text-white"
+                    ? "bg-blue-500 text-white font-bold shadow-md"
                     : ""
                 }
 
                 ${
                   holiday && selectedDay !== day
-                    ? "border border-red-400 text-red-500"
+                    ? "border border-red-400 text-red-400"
                     : ""
                 }
 
                 ${
                   !holiday && selectedDay !== day
-                    ? "hover:bg-gray-100"
+                    ? "text-slate-300 hover:bg-slate-700"
                     : ""
                 }
               `}
             >
               {day}
             </button>
+
           );
         })}
+
       </div>
 
+
       {/* Informações */}
-      <div className="mt-6 border-t pt-4 text-sm text-gray-600">
+      <div
+        className="
+          mt-5
+          border-t
+          border-slate-700
+          pt-3
+          text-sm
+          text-slate-400
+        "
+      >
+
         <p>
-          Data selecionada:
-          <strong> {selectedDay}</strong>
+          📌 Data selecionada:
+          <strong className="text-slate-200">
+            {" "}
+            {selectedDay}
+          </strong>
         </p>
 
+
         {isHoliday(selectedDay) && (
-          <p className="mt-2 text-red-500">
+          <p className="
+            mt-2
+            text-red-400
+          ">
             🎉 {isHoliday(selectedDay).name}
           </p>
         )}
+
       </div>
+
     </div>
   );
 }
