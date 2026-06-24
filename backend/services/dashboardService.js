@@ -21,6 +21,7 @@ async function getDashboard(req, res) {
         const [climaResult, moedasResult] = await Promise.allSettled([
             axios.get(CLIMA_URL),
             axios.get(MOEDAS_URL)
+            
         ]);
 
         // se a API funcionou (fulfilled), pega os dados — senão retorna null
