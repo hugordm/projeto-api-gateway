@@ -4,7 +4,6 @@ import CardMoeda from './CardMoeda';
 import GeradorInsight from './GeradorInsight';
 
 const dadosFicticios = {
-  usuario: 'Visitante',
   insight:
     'O cenário econômico atual mostra uma valorização sutil do Dólar e do Euro frente ao Real devido à volatilidade externa. Para as cidades selecionadas, o clima permanece estável com queda gradual de temperatura ao anoitecer, característico da estação atual. Recomenda-se cautela em operações cambiais de curto prazo.',
   cidades: [
@@ -52,6 +51,8 @@ function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState(null);
 
+  const nomeUsuario = localStorage.getItem('userName') || data.usuario;
+
   /* useEffect(() => {
     async function buscarDashboard() {
       try {
@@ -94,7 +95,7 @@ function Dashboard() {
     <div className="w-full max-w-6xl flex flex-col gap-10 p-4 md:p-0">
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl md:text-3xl font-bold text-white">
-          Olá, <span className="text-[#c8b7e9]">{data.usuario}</span>!
+          Olá, <span className="text-[#c8b7e9]">{nomeUsuario}</span>!
         </h1>
         <p className="text-sm text-slate-400">
           Aqui está o resumo em tempo real do seu monitoramento personalizado.
