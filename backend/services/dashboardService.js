@@ -12,6 +12,9 @@ async function getDashboard(req, res) {
     try {
         // pega a cidade da URL (?cidade=Recife) ou usa São Paulo como padrão
         const cidade = req.query.cidade || "São Paulo";
+
+        // pega a moeda de interesse da URL (?moeda=EUR ou ?moeda=USD) — padrão USD
+        const moeda = req.query.moeda || "USD";
         
         // monta a URL do clima dinamicamente com a cidade e a chave da API
         const CLIMA_URL = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=${process.env.CLIMA_API_KEY}&units=metric&lang=pt_br`;
@@ -35,15 +38,16 @@ async function getDashboard(req, res) {
 
         // monta o resumo para enviar para a Claude gerar o insight
         // verifica se cada dado existe antes de acessar os campos
-        const resumo = `Temperatura em ${clima ? `${clima.name}: ${clima.main.temp}°C, ${clima.weather[0].description}` : "indisponível"}. Dolar: ${moedas ? moedas.rates.BRL : "indisponível"}`;
+        const resumo = `Temperatura em ${clima ? `${clima.name}: ${clima.main.temp}°C, ${clima.weather[0].description}` : "indisponível"}. Dolar: ${moedas ? moedas.rates.BRL : "indisponível"}. Euro: ${moedas ? moedas.rates.EUR : "indisponível"}`;
         
         // chama a Claude Haiku para gerar uma frase de análise em português
+        // o insight é personalizado conforme a moeda de interesse do usuário
         const mensagem = await client.messages.create({
             model: "claude-haiku-4-5-20251001", // modelo mais rápido e eficiente
             max_tokens: 200, // limite de tokens da resposta
             messages: [{
                 role: "user",
-                content: `Com base nesses dados: ${resumo}, gere uma frase curta de análise em português.`
+                content: `Com base nesses dados: ${resumo}, gere uma frase curta focando na moeda ${moeda} em português.`
             }]
         });
 
@@ -54,7 +58,7 @@ async function getDashboard(req, res) {
         res.json({
             clima,   // dados do clima da cidade
             moedas,  // dados das moedas
-            insight, // análise gerada pela Claude
+            insight, // análise gerada pela Claude focando na moeda escolhida
             avisos   // avisos de erro caso alguma API falhe
         });
 
