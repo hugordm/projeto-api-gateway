@@ -112,7 +112,6 @@ function Dashboard() {
             <CardClima key={cidade.id} cidade={cidade} />
           ))}
         </div>
-        
       </div>
 
       <div className="flex flex-col gap-4">
@@ -127,7 +126,6 @@ function Dashboard() {
       </div>
 
       <GeradorInsight textoIA={data.insight} />
-      
     </div>
   );
 }
