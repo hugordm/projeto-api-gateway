@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Banner from './Banner';
 import CardClima from './CardClima';
 import CardMoeda from './CardMoeda';
+import Calendar from './Calendario';
 
 const dadosFicticios = {
   insight:
@@ -52,6 +53,10 @@ function Dashboard() {
 
   if (!data) return null;
 
+
+  const [showCalendar, setShowCalendar] = useState(false);
+
+
   return (
     <div className="w-full max-w-4xl bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-6">
       <Banner insight={data.insight} />
@@ -60,7 +65,21 @@ function Dashboard() {
         <CardClima cidade={data.cidade} temp={data.temp} />
 
         <CardMoeda dolar={data.dolar} />
+
+        <div>
+          <button onClick={() => setShowCalendar(!showCalendar)}
+            className="rounded-lg bg-gray-200 px-4 py-2 hover:bg-gray-300">
+            {showCalendar ? "Esconder calendário" : "Mostrar calendário"}
+          </button>
+
+          <div className={`overflow-hidden transition-all duration-300
+          ${showCalendar ? "max-h-125" : "max-h-0"}`}>
+            <Calendar />
+          </div>
+        </div>
+
       </div>
+
     </div>
   );
 }
