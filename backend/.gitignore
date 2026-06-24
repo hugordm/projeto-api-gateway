@@ -1,0 +1,12 @@
+# Variáveis de ambiente - NUNCA subir para o GitHub
+# Esse arquivo tem as chaves secretas das APIs do projeto
+.env
+
+# Dependências do Node.js
+# A pasta node_modules é muito pesada e gerada automaticamente
+# Não precisa ir para o GitHub
+node_modules/
+
+# Arquivos de sistema do Windows - gerados automaticamente pelo sistema
+Thumbs.db
+desktop.ini
