@@ -1,11 +1,13 @@
-import './App.css';
-import Dashboard from './components/Dashboard';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
 
 function App() {
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 md:p-8">
-      <Dashboard />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
