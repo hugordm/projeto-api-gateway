@@ -20,10 +20,10 @@ export default function Mapa() {
 
         try {
           const resposta = await fetch(
-            `http://localhost:3001/api/clima?lat=${lat}&lon=${lng}`,
+            `http://localhost:8000/api/clima?lat=${lat}&lon=${lng}`,
           );
           const dados = await resposta.json();
-          setClima(dados);
+          setClima(dados.dados);
         } catch (erro) {
           console.log("Erro ao buscar dados do clima:", erro);
         }
@@ -35,7 +35,7 @@ export default function Mapa() {
     <div className="flex gap-5 p-5">
 
         {/*Container do Mapa*/}
-        <MapContainer center={[0, 0]} zoom={2} className="h-96 w-3/4">
+        <MapContainer center={[-15, -50]} zoom={4} className="h-96 w-3/4">
         <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution= '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>'
