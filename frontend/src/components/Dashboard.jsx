@@ -22,9 +22,11 @@ function Dashboard() {
           localStorage.getItem('userCity') || 'São Paulo';
 
         // Busca dados atuais
-        const dashboardResponse = await axios.get(
-          `http://localhost:8000/api/dashboard?cidade=${encodeURIComponent(cidade)}`
-        );
+       const moeda = localStorage.getItem('userCurrency') || 'USD';
+
+       const dashboardResponse = await axios.get(
+        `http://localhost:8000/api/dashboard?cidade=${encodeURIComponent(cidade)}&moeda=${moeda}`
+       )
 
         // Busca histórico das moedas
         const historicoResponse = await axios.get(
