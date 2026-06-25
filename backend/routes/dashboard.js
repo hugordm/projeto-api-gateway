@@ -1,5 +1,5 @@
 const { Router } = require("express"); // importa o Router do Express
-const { getDashboard, getHistorico } = require("../services/dashboardService"); // importa as funções do dashboardService
+const { getDashboard, getHistorico, getInsight } = require("../services/dashboardService"); // importa as funções do dashboardService
 const { getClima } = require("../controllers/climaController"); // importa a função do climaController
 const { getGeocoding } = require("../controllers/geocodingController"); // importa a função do geocodingController
 const { chat } = require("../controllers/chatController");
@@ -21,5 +21,7 @@ router.get("/geocoding", getGeocoding);
 // rota do chatbot — recebe pergunta e responde com contexto dos dados
 router.post("/chat", chat);
 
+// rota de insight — gera análise da Claude sob demanda
+router.get("/insight", getInsight);
 
 module.exports = router; // exporta o roteador para o app.js usar
