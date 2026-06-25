@@ -10,8 +10,13 @@ function Dashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState(null);
+  const [periodo, setPeriodo] = useState({
+    inicio: new Date("2026-01-01"),
+    fim: new Date("2026-06-24"),
+  });
 
   const nomeUsuario = localStorage.getItem('userName') || '';
+  const formatDate = (date) => date.toISOString().split("T")[0];
 
   useEffect(() => {
     async function buscarDashboard() {
@@ -19,23 +24,40 @@ function Dashboard() {
         setLoading(true);
 
         const cidade =
-          localStorage.getItem('userCity') || 'São Paulo';
+          localStorage.getItem("userCity") || "São Paulo";
+
+        const moeda =
+          localStorage.getItem("userCurrency") || "USD";
 
         // Busca dados atuais
-       const moeda = localStorage.getItem('userCurrency') || 'USD';
+        const dashboardResponse = await axios.get(
+          `http://localhost:8000/api/dashboard?cidade=${encodeURIComponent(
+            cidade
+          )}&moeda=${moeda}`
+        );
 
-       const dashboardResponse = await axios.get(
-        `http://localhost:8000/api/dashboard?cidade=${encodeURIComponent(cidade)}&moeda=${moeda}`
-       )
+        // Define período do histórico
+        const inicio = periodo.inicio
+          ? formatDate(periodo.inicio)
+          : "2026-01-01";
 
-        // Busca histórico das moedas
+        const fim = periodo.fim
+          ? formatDate(periodo.fim)
+          : "2026-06-24";
+
+        // Busca histórico conforme o período
         const historicoResponse = await axios.get(
-          'http://localhost:8000/api/historico'
+          "http://localhost:8000/api/historico",
+          {
+            params: {
+              start: inicio,
+              end: fim,
+            },
+          }
         );
 
         const dados = dashboardResponse.data;
         const historico = historicoResponse.data;
-
 
         const dashboardFormatado = {
           insight: dados.insight,
@@ -48,79 +70,69 @@ function Dashboard() {
               condicao: dados.clima.weather[0].description,
               umidade: `${dados.clima.main.humidity}%`,
               vento: `${dados.clima.wind.speed} km/h`,
-              estacao: 'Atual'
-            }
+              estacao: "Atual",
+            },
           ],
-
 
           moedas: [
             {
               id: 1,
-              nome: 'Dólar',
-              codigo: 'USD',
+              nome: "Dólar",
+              codigo: "USD",
               valor: dados.moedas.rates.BRL.toFixed(2),
-              variacao: '+0%',
+              variacao: "+0%",
 
               historico: Object.entries(historico.rates).map(
                 ([data, valor]) => ({
                   data,
-                  valor: valor.BRL
+                  valor: valor.BRL,
                 })
-              )
+              ),
             },
-
 
             {
               id: 2,
-              nome: 'Euro',
-              codigo: 'EUR',
+              nome: "Euro",
+              codigo: "EUR",
 
-              // converte USD/EUR para EUR/BRL
               valor: (
                 dados.moedas.rates.BRL /
                 dados.moedas.rates.EUR
               ).toFixed(2),
 
-              variacao: '+0%',
+              variacao: "+0%",
 
               historico: Object.entries(historico.rates).map(
                 ([data, valor]) => ({
                   data,
-                  valor: valor.BRL / valor.EUR
+                  valor: valor.BRL / valor.EUR,
                 })
-              )
-            }
-          ]
+              ),
+            },
+          ],
         };
 
-
         setData(dashboardFormatado);
-
       } catch (error) {
         console.error(error);
         setErro(error.message);
-
       } finally {
         setLoading(false);
       }
     }
 
-
     buscarDashboard();
-
-  }, []);
-
+  }, [periodo]);
 
 
-  if (loading) {
-    return (
-      <div className="w-full max-w-6xl bg-white p-8 rounded-3xl shadow-xl border border-slate-100 flex justify-center items-center min-h-100">
-        <p className="text-slate-500 animate-pulse font-medium">
-          Carregando seu painel personalizado...
-        </p>
-      </div>
-    );
-  }
+
+  if (!data) {
+  return (
+    <div className="w-full max-w-6xl p-8 text-slate-400">
+      Carregando dados...
+    </div>
+  );
+}
 
 
   if (erro) {
@@ -160,7 +172,7 @@ function Dashboard() {
 
         <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
           🌤️ Clima e Tempo nas Cidades Selecionadas
-          
+
         </h2>
 
 
@@ -173,7 +185,15 @@ function Dashboard() {
             />
           ))}
 
-          <Calendar />
+          <Calendar
+            periodoInicial={periodo}
+            onRangeChange={(inicio, fim) =>
+              setPeriodo({
+                inicio,
+                fim,
+              })
+            }
+          />
 
         </div>
 

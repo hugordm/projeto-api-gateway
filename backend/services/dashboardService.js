@@ -71,15 +71,22 @@ async function getDashboard(req, res) {
 // busca o histórico de valorização do dólar desde janeiro de 2026
 async function getHistorico(req, res) {
     try {
-        // chama a API Frankfurter — gratuita e sem limite
+
+        const { start, end } = req.query;
+
+        const inicio = start || "2026-01-01";
+        const fim = end || "2026-06-24";
+
         const resposta = await axios.get(
-            'https://api.frankfurter.app/2026-01-01..2026-06-24?from=USD&to=BRL'
+            `https://api.frankfurter.app/${inicio}..${fim}?from=USD&to=BRL`
         );
-        // retorna o histórico completo para o front-end montar o gráfico
+
         res.json(resposta.data);
+
     } catch (error) {
-        // se der erro, retorna status 500 com a mensagem
-        res.status(500).json({ erro: error.message });
+        res.status(500).json({
+            erro: error.message
+        });
     }
 }
 

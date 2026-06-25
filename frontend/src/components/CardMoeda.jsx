@@ -1,4 +1,4 @@
-import { Line, LineChart, ResponsiveContainer, Tooltip, YAxis } from 'recharts';
+import { Line, LineChart, ResponsiveContainer, Tooltip, YAxis, XAxis } from 'recharts';
 
 function CardMoeda({ moeda }) {
   const dadosGrafico = moeda.historico.map((item) => ({
@@ -26,8 +26,8 @@ function CardMoeda({ moeda }) {
 
         <span
           className={`px-3 py-1 rounded-full text-sm font-bold ${ehPositivo
-              ? 'bg-emerald-500/10 text-emerald-400'
-              : 'bg-rose-500/10 text-rose-400'
+            ? 'bg-emerald-500/10 text-emerald-400'
+            : 'bg-rose-500/10 text-rose-400'
             }`}
         >
           {moeda.variacao || '0%'}
@@ -38,6 +38,19 @@ function CardMoeda({ moeda }) {
         {dadosGrafico.length > 1 ? (
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={dadosGrafico}>
+
+              <XAxis
+                dataKey="dia"
+                tickFormatter={(data) => {
+                  const [ano, mes, dia] = data.split("-");
+                  return `${dia}/${mes}`;
+                }}
+                tick={{
+                  fill: '#94a3b8',
+                  fontSize: 12,
+                }}
+              />
+
               <YAxis domain={['dataMin', 'dataMax']} hide />
 
               <Tooltip
@@ -49,6 +62,10 @@ function CardMoeda({ moeda }) {
                 }}
                 itemStyle={{
                   color: '#c8b7e9',
+                }}
+                labelFormatter={(data) => {
+                  const [ano, mes, dia] = data.split("-");
+                  return `${dia}/${mes}/${ano}`;
                 }}
               />
 
@@ -63,6 +80,7 @@ function CardMoeda({ moeda }) {
                   fill: '#c8b7e9',
                 }}
               />
+
             </LineChart>
           </ResponsiveContainer>
         ) : (
