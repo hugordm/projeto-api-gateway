@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import Home from './pages/Home';
-import Mapa from './components/Mapa'; // importa o Mapa
+
 
 function App() {
   return (
@@ -17,8 +17,6 @@ function App() {
             </div>
           }
         />
-
-        <Route path="/mapa" element={<Mapa />} /> {/* rota do mapa */}
       </Routes>
     </BrowserRouter>
   );
