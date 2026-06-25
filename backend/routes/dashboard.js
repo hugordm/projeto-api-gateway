@@ -2,6 +2,7 @@ const { Router } = require("express"); // importa o Router do Express
 const { getDashboard, getHistorico } = require("../services/dashboardService"); // importa as funções do dashboardService
 const { getClima } = require("../controllers/climaController"); // importa a função do climaController
 const { getGeocoding } = require("../controllers/geocodingController"); // importa a função do geocodingController
+const { chat } = require("../controllers/chatController");
 
 const router = Router(); // cria o roteador
 
@@ -16,5 +17,9 @@ router.get("/clima", getClima);
 
 // rota de geocoding — converte nome da cidade em coordenadas para o mapa
 router.get("/geocoding", getGeocoding);
+
+// rota do chatbot — recebe pergunta e responde com contexto dos dados
+router.post("/chat", chat);
+
 
 module.exports = router; // exporta o roteador para o app.js usar
