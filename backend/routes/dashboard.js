@@ -1,12 +1,9 @@
-const { Router } = require("express"); // importa o Router do Express
-const { getDashboard, getHistorico } = require("../services/dashboardService"); // importa as funções do service
+const { Router } = require('express');
+const { getClima } = require('../controllers/climaController');
 
-const router = Router(); // cria o roteador
+const router = Router();
 
-// define que GET /api/dashboard chama a função getDashboard
-router.get("/dashboard", getDashboard);
+// Rota GET /api/clima
+router.get('/clima', getClima);
 
-// define que GET /api/historico chama a função getHistorico
-router.get("/historico", getHistorico);
-
-module.exports = router; // exporta o roteador para o app.js usar
+module.exports = router;
