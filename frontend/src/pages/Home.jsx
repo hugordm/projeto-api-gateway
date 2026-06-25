@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import imgBanner from '../assets/imagemHome.png';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import Footer from '../components/Footer';
@@ -63,25 +64,64 @@ export default function Home() {
 
       <main className="flex-1 flex items-center justify-center w-full px-6 md:px-12 lg:px-16 py-8">
         <div className="w-full max-w-384 flex flex-col xl:flex-row items-stretch justify-center gap-6">
+          {/* Card Principal */}
+          <div className="w-full xl:w-[65%] bg-[#FDFCF6] border-[3px] border-[#1A1A1A] rounded-4xl flex flex-col overflow-hidden shadow-sm">
+            <div className="flex-1 mx-2 mt-2 mb-1 bg-[#C9B6EB] rounded-3xl p-5 lg:px-8 lg:py-6 flex flex-col lg:flex-row items-center relative overflow-hidden">
+              <div className="w-full lg:w-[55%] space-y-4 z-10 flex flex-col justify-center h-full">
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-[2.2rem] xl:text-[2.5rem] font-extrabold text-[#1A1A1A] leading-[1.1] uppercase tracking-tight">
+                  Dados reais
+                  <br />
+                  Resumos ágeis
+                  <br />
+                  Simplicidade total
+                </h1>
 
-          {/* Mapa */}
-          <div className="w-full xl:w-[65%] border-[3px] border-[#1A1A1A] rounded-4xl overflow-hidden shadow-sm" style={{ minHeight: '400px' }}>
-            <MapContainer
-              center={coordenadas ? [coordenadas.lat, coordenadas.lon] : [-15, -50]}
-              zoom={coordenadas ? 10 : 4}
-              style={{ height: '100%', minHeight: '400px', width: '100%' }}
-            >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>'
-              />
-              {coordenadas && (
-                <>
-                  <CentralizarMapa lat={coordenadas.lat} lon={coordenadas.lon} />
-                  <Marker position={[coordenadas.lat, coordenadas.lon]} />
-                </>
-              )}
-            </MapContainer>
+                <p className="text-[#3A3A3A] text-sm leading-snug font-medium">
+                  Tudo o que você precisa saber, centralizado em um único painel
+                  intuitivo. Monitore em tempo real as variações do mercado
+                  financeiro, acompanhe as condições climáticas da sua região e
+                  mantenha-se informado com as principais notícias globais.
+                </p>
+
+                <div className="pt-2">
+                  <button
+                    onClick={() =>
+                      window.open(
+                        'https://github.com/hugordm/projeto-api-gateway',
+                        '_blank',
+                        'noopener,noreferrer',
+                      )
+                    }
+                    className="bg-transparent border-2 border-[#38263D]/30 text-[#38263D] px-5 py-1.5 rounded-full text-sm font-bold hover:bg-white/20 transition-colors"
+                  >
+                    Ver Repositório
+                  </button>
+                </div>
+              </div>
+
+              <div className="w-full lg:w-[45%] mt-4 lg:mt-0 flex justify-end items-center h-full">
+                <img
+                  src={imgBanner}
+                  alt="Ilustração de Destaque"
+                  className="w-full h-auto max-h-45 lg:max-h-57.5 object-contain mix-blend-multiply opacity-90 scale-110 lg:scale-125 lg:origin-right translate-x-6 lg:translate-x-12"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-row flex-wrap items-center justify-center gap-x-6 gap-y-1 py-2 text-[#1A1A1A] font-bold text-xs lg:text-sm w-full shrink-0">
+              <div className="flex items-center gap-1.5">
+                <span className="text-lg leading-none">·</span> Dados em Tempo
+                Real
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-lg leading-none">·</span> Insights
+                Instantâneos
+              </div>
+              <div className="flex items-center gap-1.5 md:flex">
+                <span className="text-lg leading-none">·</span> Organização
+                Inteligente
+              </div>
+            </div>
           </div>
 
           {/* Formulário */}
@@ -123,9 +163,25 @@ export default function Home() {
                     buscarCoordenadas(e.target.value);
                   }}
                   placeholder="Ex: Recife"
-                  className="w-full border-2 border-gray-200 rounded-lg p-2.5 focus:border-[#38263D] outline-none transition-colors font-medium text-sm"
+                  className="w-full border-2 border-gray-200 rounded-lg p-2.5 focus:border-[#38263D] outline-none transition-colors font-medium text-sm "
                   required
                 />
+                <MapContainer
+                  center={coordenadas ? [coordenadas.lat, coordenadas.lon] : [-15, -50]}
+                  zoom={coordenadas ? 10 : 4}
+                  className='h-48 min-h-48 w-full rounded-lg mt-2'
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>'
+                  />
+                  {coordenadas && (
+                    <>
+                      <CentralizarMapa lat={coordenadas.lat} lon={coordenadas.lon} />
+                      <Marker position={[coordenadas.lat, coordenadas.lon]} />
+                    </>
+                  )}
+                </MapContainer>
               </div>
 
               <div>
