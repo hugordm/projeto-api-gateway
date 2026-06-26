@@ -91,7 +91,7 @@ async function getHistorico(req, res) {
 
         // chama a Frankfurter — gratuita, sem limite e sem chave
         const resposta = await axios.get(
-            `https://api.frankfurter.app/${inicio}..${fim}?from=USD&to=BRL`
+            `https://api.frankfurter.app/${inicio}..${fim}?from=USD&to=BRL,EUR`
         );
 
         // retorna o histórico completo para o front-end montar o gráfico
