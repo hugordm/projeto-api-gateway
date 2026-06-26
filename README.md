@@ -76,7 +76,21 @@ Aplicação web que permite visualizar **informações meteorológicas em tempo 
 | **Frankfurter** | Cotação de moedas |
 | **OpenStreetMap** | Mapas interativos |
 
-
+## 📡 Documentação URL
+| Método | URL | Função |
+|------------|------------|------------|
+| 1	| open-meteo.com	| 🌤️ Clima por coordenadas
+| 2	| openweathermap.org	| 🌤️ Clima por cidade
+| 3	| openweathermap.org/geo	| 📍 Converter cidade em coordenadas
+| 4	| brasilapi.com.br	| 📅 Feriados nacionais
+| 5	| exchangerate-api.com	| 💰 Taxas de câmbio
+| 6	| frankfurter.app	| 📈 Histórico de cotações
+| 7	| localhost:8000/api/clima	| 🌤️ Clima do mapa
+| 8	| localhost:8000/api/geocoding	| 📍 Geocodificação
+| 9	| localhost:8000/api/historico	| 📈 Histórico de cotações
+| 10 | localhost:8000/api/insight	| 🤖 Análise com IA
+| 11 | localhost:8000/api/chat	| 💬 Chat com IA
+| 12 | localhost:8000/api/dashboard	| 📊 Dados combinados
 
 ## 📁 Fluxograma do Projeto
 
