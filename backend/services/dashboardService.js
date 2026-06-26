@@ -64,12 +64,21 @@ async function getInsight(req, res) {
 
 async function getHistorico(req, res) {
     try {
+
+        const { start, end } = req.query;
+
+        const inicio = start || "2026-01-01";
+        const fim = end || "2026-06-24";
+
         const resposta = await axios.get(
-            'https://api.frankfurter.app/2026-01-01..2026-06-24?from=USD&to=BRL,EUR'
+            `https://api.frankfurter.app/${inicio}..${fim}?from=USD&to=BRL`
         );
         res.json(resposta.data);
+
     } catch (error) {
-        res.status(500).json({ erro: error.message });
+        res.status(500).json({
+            erro: error.message
+        });
     }
 }
 
