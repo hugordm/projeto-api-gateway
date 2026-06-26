@@ -38,12 +38,13 @@ function Chatbot() {
     try {
       const urlBase = import.meta.env.VITE_API_URL;
       const cidade = localStorage.getItem('userCity') || 'São Paulo';
-      const moeda = localStorage.getItem('userCurrency') || 'USD';
+
+      const moedas = localStorage.getItem('userCurrencies') || 'USD,EUR';
 
       const resposta = await axios.post(`${urlBase}/api/chat`, {
         pergunta: perguntaDoUsuario,
         cidade,
-        moeda,
+        moedas,
       });
 
       setMensagens((prev) => [

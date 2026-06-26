@@ -55,11 +55,38 @@ export default function Home() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
-  const [currency, setCurrency] = useState('USD');
   const [isLoading, setIsLoading] = useState(false);
   const [coordenadas, setCoordenadas] = useState(null);
+  const [currencyError, setCurrencyError] = useState(false);
+
+  const [selectedCurrencies, setSelectedCurrencies] = useState(['USD', 'EUR']);
 
   const nameInputRef = useRef(null);
+
+  const moedasDisponiveis = [
+    { code: 'USD', name: 'Dólar (USD)' },
+    { code: 'EUR', name: 'Euro (EUR)' },
+    { code: 'GBP', name: 'Libra (GBP)' },
+    { code: 'JPY', name: 'Iene (JPY)' },
+    { code: 'AUD', name: 'Dólar Aus. (AUD)' },
+    { code: 'CAD', name: 'Dólar Can. (CAD)' },
+    { code: 'CHF', name: 'Franco (CHF)' },
+    { code: 'CNY', name: 'Yuan (CNY)' },
+  ];
+
+  const toggleCurrency = (code) => {
+    setSelectedCurrencies((prev) => {
+      const newSelection = prev.includes(code)
+        ? prev.filter((c) => c !== code)
+        : [...prev, code];
+
+      if (newSelection.length > 0) {
+        setCurrencyError(false);
+      }
+
+      return newSelection;
+    });
+  };
 
   const buscarCoordenadas = async (nomeCidade) => {
     if (!nomeCidade || nomeCidade.length < 3) return;
@@ -79,12 +106,18 @@ export default function Home() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (selectedCurrencies.length === 0) {
+      setCurrencyError(true);
+      return;
+    }
+
     setIsLoading(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       localStorage.setItem('userName', name);
       localStorage.setItem('userCity', city);
-      localStorage.setItem('userCurrency', currency);
+      localStorage.setItem('userCurrencies', selectedCurrencies.join(','));
       navigate('/dashboard');
     } catch (error) {
       console.error('Erro:', error);
@@ -95,14 +128,14 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full min-h-screen lg:h-screen lg:overflow-hidden bg-white font-sans text-[#1A1A1A] flex flex-col">
+    <div className="w-full min-h-dvh lg:h-dvh lg:overflow-hidden bg-white font-sans text-[#1A1A1A] flex flex-col">
       <Navbar onFocusForm={() => nameInputRef.current?.focus()} />
 
-      <main className="w-full flex-1 overflow-y-auto flex items-center justify-center px-4 sm:px-6 md:px-12 lg:px-16 py-6 md:py-8">
-        <div className="w-full max-w-7xl flex flex-col lg:flex-row items-stretch justify-center gap-6">
+      <main className="w-full flex-1 overflow-y-auto flex items-center justify-center px-4 sm:px-6 md:px-12 lg:px-16 py-3 md:py-4">
+        <div className="w-full max-w-7xl flex flex-col lg:flex-row items-stretch justify-center gap-4 lg:gap-6">
           <div className="w-full lg:w-[62%] bg-[#FDFCF6] border-[3px] border-[#1A1A1A] rounded-3xl lg:rounded-4xl flex flex-col overflow-hidden shadow-sm">
             <div className="flex-1 mx-2 mt-2 mb-1 bg-[#C9B6EB] rounded-2xl lg:rounded-3xl p-5 lg:px-8 lg:py-6 flex flex-col sm:flex-row lg:flex-row items-center relative overflow-hidden gap-4">
-              <div className="w-full sm:w-[60%] lg:w-[55%] space-y-4 z-10 flex flex-col justify-center h-full">
+              <div className="w-full sm:w-[60%] lg:w-[55%] space-y-3 lg:space-y-4 z-10 flex flex-col justify-center h-full">
                 <h1 className="font-display text-2xl sm:text-3xl lg:text-[2.2rem] xl:text-[2.5rem] font-extrabold text-[#1A1A1A] leading-[1.1] uppercase tracking-tight">
                   Dados reais
                   <br />
@@ -160,7 +193,7 @@ export default function Home() {
           </div>
 
           <div className="w-full lg:w-[38%] bg-white border-[3px] border-[#1A1A1A] rounded-3xl lg:rounded-4xl p-5 sm:p-6 lg:p-8 flex flex-col justify-center relative shadow-[4px_4px_0px_#1A1A1A]">
-            <div className="mb-4 lg:mb-6">
+            <div className="mb-3 lg:mb-4">
               <h2 className="font-display text-xl sm:text-2xl font-extrabold text-[#1A1A1A] mb-1 tracking-tight">
                 Quase lá!
               </h2>
@@ -169,7 +202,7 @@ export default function Home() {
               </p>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-3 sm:space-y-4">
+            <form onSubmit={handleLogin} className="space-y-2 sm:space-y-3">
               <div>
                 <label className="block text-[11px] sm:text-xs font-bold text-[#1A1A1A] mb-1">
                   Como quer ser chamado?
@@ -201,7 +234,7 @@ export default function Home() {
                   required
                 />
 
-                <div className="h-28 sm:h-36 md:h-40 w-full rounded-lg mt-2 overflow-hidden border border-gray-200 isolation-blur relative z-0">
+                <div className="h-24 sm:h-28 md:h-32 w-full rounded-lg mt-2 overflow-hidden border border-gray-200 isolation-blur relative z-0">
                   <MapContainer
                     center={
                       coordenadas
@@ -235,17 +268,30 @@ export default function Home() {
               </div>
 
               <div>
-                <label className="block text-[11px] sm:text-xs font-bold text-[#1A1A1A] mb-1">
-                  Moeda de interesse
+                <label className="block text-[11px] sm:text-xs font-bold text-[#1A1A1A] mb-1.5">
+                  Moedas de interesse (Selecione uma ou mais)
                 </label>
-                <select
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full border-2 border-gray-200 cursor-pointer rounded-lg p-2 focus:border-[#38263D] outline-none transition-colors font-medium text-xs sm:text-sm bg-white"
-                >
-                  <option value="USD">Dólar Americano (USD)</option>
-                  <option value="EUR">Euro (EUR)</option>
-                </select>
+                <div className="flex flex-wrap gap-2">
+                  {moedasDisponiveis.map((m) => (
+                    <button
+                      key={m.code}
+                      type="button"
+                      onClick={() => toggleCurrency(m.code)}
+                      className={`cursor-pointer px-2 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition-colors border-2 ${
+                        selectedCurrencies.includes(m.code)
+                          ? 'bg-[#38263D] text-white border-[#38263D]'
+                          : 'bg-white text-gray-500 border-gray-200 hover:border-[#C9B6EB]'
+                      }`}
+                    >
+                      {m.name}
+                    </button>
+                  ))}
+                </div>
+                {currencyError && (
+                  <div className="mt-2 p-2 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center gap-2 text-red-500 text-xs font-bold ">
+                    <span>⚠️</span> Selecione pelo menos uma moeda.
+                  </div>
+                )}
               </div>
 
               <button
