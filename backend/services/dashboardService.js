@@ -22,7 +22,6 @@ async function getDashboard(req, res) {
         if (!clima) avisos.push("Dados de clima indisponíveis");
         if (!moedas) avisos.push("Dados de moedas indisponíveis");
 
-        // sem Claude aqui — só clima e moedas
         res.json({ clima, moedas, avisos });
 
     } catch (error) {
@@ -30,7 +29,6 @@ async function getDashboard(req, res) {
     }
 }
 
-// nova função — gera insight sob demanda quando usuário clicar no botão
 async function getInsight(req, res) {
     try {
         const cidade = req.query.cidade || "São Paulo";
@@ -67,7 +65,7 @@ async function getInsight(req, res) {
 async function getHistorico(req, res) {
     try {
         const resposta = await axios.get(
-            'https://api.frankfurter.app/2026-01-01..2026-06-24?from=USD&to=BRL'
+            'https://api.frankfurter.app/2026-01-01..2026-06-24?from=USD&to=BRL,EUR'
         );
         res.json(resposta.data);
     } catch (error) {

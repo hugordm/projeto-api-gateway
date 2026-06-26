@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from 'react';
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -7,7 +7,7 @@ export default function Calendar() {
 
   useEffect(() => {
     fetch(
-      `https://brasilapi.com.br/api/feriados/v1/${currentDate.getFullYear()}`
+      `https://brasilapi.com.br/api/feriados/v1/${currentDate.getFullYear()}`,
     )
       .then((res) => res.json())
       .then((data) => setHolidays(data))
@@ -16,55 +16,34 @@ export default function Calendar() {
 
   const previousMonth = () => {
     setCurrentDate(
-      new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() - 1,
-        1
-      )
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1),
     );
   };
 
   const nextMonth = () => {
     setCurrentDate(
-      new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() + 1,
-        1
-      )
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1),
     );
   };
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  const daysInMonth = new Date(
-    year,
-    month + 1,
-    0
-  ).getDate();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const firstDay = new Date(
-    year,
-    month,
-    1
-  ).getDay();
+  const firstDay = new Date(year, month, 1).getDay();
 
-  const monthName = currentDate.toLocaleDateString(
-    "pt-BR",
-    {
-      month: "long",
-      year: "numeric",
-    }
-  );
+  const monthName = currentDate.toLocaleDateString('pt-BR', {
+    month: 'long',
+    year: 'numeric',
+  });
 
   const isHoliday = (day) => {
     const date = new Date(year, month, day);
 
-    const formatted = date.toLocaleDateString("sv-SE");
+    const formatted = date.toLocaleDateString('sv-SE');
 
-    return holidays.find(
-      (holiday) => holiday.date === formatted
-    );
+    return holidays.find((holiday) => holiday.date === formatted);
   };
 
   const days = [];
@@ -94,20 +73,19 @@ export default function Calendar() {
         text-slate-200
       "
     >
-
       {/* Cabeçalho */}
       <div className="mb-4 flex items-center justify-between">
-
-        <h2 className="
+        <h2
+          className="
           text-lg
           font-bold
           capitalize
-        ">
+        "
+        >
           📅 {monthName}
         </h2>
 
         <div className="flex gap-1">
-
           <button
             onClick={previousMonth}
             className="
@@ -137,11 +115,8 @@ export default function Calendar() {
           >
             →
           </button>
-
         </div>
-
       </div>
-
 
       {/* Dias da semana */}
       <div
@@ -164,12 +139,9 @@ export default function Calendar() {
         <span>Sáb</span>
       </div>
 
-
       {/* Dias */}
       <div className="grid grid-cols-7 gap-y-2">
-
         {days.map((day, index) => {
-
           if (!day) {
             return <div key={index}></div>;
           }
@@ -177,12 +149,10 @@ export default function Calendar() {
           const holiday = isHoliday(day);
 
           return (
-
             <button
               key={index}
-              title={holiday?.name || ""}
+              title={holiday?.name || ''}
               onClick={() => setSelectedDay(day)}
-
               className={`
                 mx-auto
                 flex
@@ -196,31 +166,28 @@ export default function Calendar() {
 
                 ${
                   selectedDay === day
-                    ? "bg-blue-500 text-white font-bold shadow-md"
-                    : ""
+                    ? 'bg-blue-500 text-white font-bold shadow-md'
+                    : ''
                 }
 
                 ${
                   holiday && selectedDay !== day
-                    ? "border border-red-400 text-red-400"
-                    : ""
+                    ? 'border border-red-400 text-red-400'
+                    : ''
                 }
 
                 ${
                   !holiday && selectedDay !== day
-                    ? "text-slate-300 hover:bg-slate-700"
-                    : ""
+                    ? 'text-slate-300 hover:bg-slate-700'
+                    : ''
                 }
               `}
             >
               {day}
             </button>
-
           );
         })}
-
       </div>
-
 
       {/* Informações */}
       <div
@@ -231,31 +198,26 @@ export default function Calendar() {
           pt-3
           text-sm
           text-slate-400
+          flex
+          gap-3
+          items-center
         "
       >
-
         <p>
           📌 Data selecionada:
-          <strong className="text-slate-200">
-            {" "}
-            {selectedDay}
-          </strong>
+          <strong className="text-slate-200"> {selectedDay}</strong>
         </p>
 
-
         {isHoliday(selectedDay) && (
-          <p className="
-            mt-2
+          <p
+            className="
             text-red-400
-          ">
+          "
+          >
             🎉 {isHoliday(selectedDay).name}
           </p>
         )}
-
       </div>
-
     </div>
   );
 }
-
-
