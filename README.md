@@ -71,9 +71,9 @@ Aplicação web que permite visualizar **informações meteorológicas em tempo 
 ### APIs Externas
 | API | Finalidade |
 |-----|------------|
-| **@anthropic-ai/sdk** | SDK oficial da API do Claude (Anthropic) |
-| **ClaudeHaiku** | Cotação Moeda |
+| **ClaudeHaiku** | Geração de insights em linguagem natural |
 | **OpenWeather** | Dados meteorológicos |
+| **Frankfurter** | Cotação de moedas |
 | **OpenStreetMap** | Mapas interativos |
 
 
@@ -130,7 +130,7 @@ projeto-api-gateway/
 - ✅ **Layout responsivo** com Tailwind CSS
 - ✅ **Integração com API** externa 
 - ✅ **Arquitetura limpa** 
-
+- ✅ **Insight gerado por IA** com análise do clima e câmbio em linguagem natural
 
 
 ## 📋 Pré-requisitos
@@ -295,6 +295,23 @@ Back-end BFF (Node.js + Express + Claude Haiku)
 
 Linkedin: https://www.linkedin.com/in/hugo-melo-dev
 
+---
+
+<img src="./img/caio-henrique.jpeg" width="250" height="300" alt="Caio Henrique"/>
+
+### Caio Henrique
+Front-end React (Visual e estilização)
+
+Linkedin: https://www.linkedin.com/in/caio-guedes-03a334270/
+
+---
+
+<img src="./img/marian-lopes.jpeg" width="250" height="300" alt="Marian Lopes"/>
+
+### Marian Lopes
+Front-end React (Estrutura e visual)
+
+Linkedin: https://www.linkedin.com/in/marian-lopes-258ab0348
 
 ---
 Projeto Final · Curso Full Stack · Soul Code + Accenture · 2026
