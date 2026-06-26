@@ -24,4 +24,4 @@ router.post("/chat", chat);
 // rota de insight — gera análise da Claude sob demanda
 router.get("/insight", getInsight);
 
-module.exports = router; // exporta o roteador para o app.js usar
+module.exports = router; // exporta o roteador para o app.js usar\
