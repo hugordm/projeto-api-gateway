@@ -31,7 +31,7 @@ function GeradorInsight({ fetchInsight }) {
           clearInterval(interval);
           setStatus('done');
         }
-      }, 15);
+      }, 10);
 
       return () => clearInterval(interval);
     }
