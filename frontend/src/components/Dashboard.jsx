@@ -27,6 +27,8 @@ function Dashboard() {
   useEffect(() => {
     async function buscarDashboard() {
       try {
+        const urlBase = import.meta.env.VITE_API_URL;
+
         setLoading(true);
         setErro(null);
 
@@ -37,9 +39,7 @@ function Dashboard() {
           localStorage.getItem("userCurrency") || "USD";
 
         const dashboardResponse = await axios.get(
-          `http://localhost:8000/api/dashboard?cidade=${encodeURIComponent(
-            cidade
-          )}&moeda=${moeda}`
+          `${urlBase}/api/dashboard?cidade=${encodeURIComponent(cidade)}&moeda=${moeda}`
         );
 
         const inicio = periodo.inicio
@@ -51,7 +51,7 @@ function Dashboard() {
           : "2026-06-24";
 
         const historicoResponse = await axios.get(
-          "http://localhost:8000/api/historico",
+          `${urlBase}/api/historico`,
           {
             params: {
               start: inicio,
@@ -167,7 +167,7 @@ function Dashboard() {
   async function gerarInsight() {
 
     try {
-
+      const urlBase = import.meta.env.VITE_API_URL;
       setGerandoInsight(true);
 
       const cidade =
@@ -178,7 +178,7 @@ function Dashboard() {
 
 
       const resposta = await axios.get(
-        `http://localhost:8000/api/insight?cidade=${encodeURIComponent(
+        `${urlBase}/api/insight?cidade=${encodeURIComponent(
           cidade
         )}&moeda=${moeda}`
       );
