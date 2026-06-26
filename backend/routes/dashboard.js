@@ -1,7 +1,7 @@
 const { Router } = require("express"); // importa o Router do Express
 const { getDashboard, getHistorico, getInsight } = require("../services/dashboardService"); // importa as funções do dashboardService
 const { getClima } = require("../controllers/climaController"); // importa a função do climaController
-const { getGeocoding } = require("../controllers/geocodingController"); // importa a função do geocodingController
+const { getGeocoding, getReverseGeocoding } = require("../controllers/geocodingController");
 const { chat } = require("../controllers/chatController");
 const { getFeriados } = require("../controllers/calendarioController"); // importa a função do calendarioController
 const { conversorMoeda } = require("../services/conversorServices");
@@ -31,5 +31,8 @@ router.get("/calendario", getFeriados);
 
 // rota do conversor de moedas
 router.get("/conversorMoeda", conversorMoeda);
+
+// rota de reverse geocoding — converte coordenadas em nome da cidade
+router.get("/reverseGeocoding", getReverseGeocoding);
 
 module.exports = router; // exporta o roteador para o app.js usar

@@ -1,16 +1,47 @@
 import 'leaflet/dist/leaflet.css';
 import { useRef, useState } from 'react';
-import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import imgBanner from '../assets/imagemHome.png';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
+import L from 'leaflet';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
 function CentralizarMapa({ lat, lon }) {
   const map = useMap();
   if (lat && lon) {
     map.setView([lat, lon], 10);
   }
+  return null;
+}
+
+function CliqueNoMapa({ onCidade }) {
+  const urlBase = import.meta.env.VITE_API_URL;
+
+  useMapEvents({
+    click: async (e) => {
+      const { lat, lng } = e.latlng;
+      try {
+        const resposta = await fetch(
+          `${urlBase}/api/reverseGeocoding?lat=${lat}&lon=${lng}`
+        );
+        const dados = await resposta.json();
+        if (dados.name) {
+          onCidade(dados.name, lat, lng);
+        }
+      } catch (erro) {
+        console.log('Erro ao buscar cidade:', erro);
+      }
+    }
+  });
   return null;
 }
 
@@ -108,16 +139,13 @@ export default function Home() {
 
             <div className="flex flex-row flex-wrap items-center justify-center gap-x-6 gap-y-1 py-2 text-[#1A1A1A] font-bold text-xs lg:text-sm w-full shrink-0">
               <div className="flex items-center gap-1.5">
-                <span className="text-lg leading-none">·</span> Dados em Tempo
-                Real
+                <span className="text-lg leading-none">·</span> Dados em Tempo Real
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="text-lg leading-none">·</span> Insights
-                Instantâneos
+                <span className="text-lg leading-none">·</span> Insights Instantâneos
               </div>
               <div className="flex items-center gap-1.5 md:flex">
-                <span className="text-lg leading-none">·</span> Organização
-                Inteligente
+                <span className="text-lg leading-none">·</span> Organização Inteligente
               </div>
             </div>
           </div>
@@ -160,16 +188,12 @@ export default function Home() {
                     buscarCoordenadas(e.target.value);
                   }}
                   placeholder="Ex: Recife"
-                  className="w-full border-2 border-gray-200 rounded-lg p-2.5 focus:border-[#38263D] outline-none transition-colors font-medium text-sm "
+                  className="w-full border-2 border-gray-200 rounded-lg p-2.5 focus:border-[#38263D] outline-none transition-colors font-medium text-sm"
                   required
                 />
 
                 <MapContainer
-                  center={
-                    coordenadas
-                      ? [coordenadas.lat, coordenadas.lon]
-                      : [-15, -50]
-                  }
+                  center={coordenadas ? [coordenadas.lat, coordenadas.lon] : [-15, -50]}
                   zoom={coordenadas ? 10 : 4}
                   className="h-40 min-h-40 w-full rounded-lg mt-2 relative z-0"
                 >
@@ -179,13 +203,14 @@ export default function Home() {
                   />
                   {coordenadas && (
                     <>
-                      <CentralizarMapa
-                        lat={coordenadas.lat}
-                        lon={coordenadas.lon}
-                      />
+                      <CentralizarMapa lat={coordenadas.lat} lon={coordenadas.lon} />
                       <Marker position={[coordenadas.lat, coordenadas.lon]} />
                     </>
                   )}
+                  <CliqueNoMapa onCidade={(nome, lat, lng) => {
+                    setCity(nome);
+                    setCoordenadas({ lat, lon: lng });
+                  }} />
                 </MapContainer>
               </div>
 
@@ -210,25 +235,9 @@ export default function Home() {
               >
                 {isLoading ? (
                   <>
-                    <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                     Acessando...
                   </>
