@@ -196,8 +196,8 @@ export default function Calendar({ periodoInicial, onRangeChange }) {
                       future
                         ? 'opacity-40 text-slate-500 cursor-not-allowed'
                         : inRange(day)
-                        ? 'bg-blue-200 text-slate-900'
-                        : 'text-slate-200 hover:bg-slate-700 cursor-pointer'
+                          ? 'bg-blue-200 text-slate-900'
+                          : 'text-slate-200 hover:bg-slate-700 cursor-pointer'
                     }
 
                     ${

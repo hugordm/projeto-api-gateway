@@ -2,12 +2,12 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-import Calendar from './Calendario';
-import CardClima from './CardClima';
-import CardMoeda from './CardMoeda';
-import Chatbot from './Chatbot';
-import ConversorMoedas from './ConversorMoedas';
-import GeradorInsight from './GeradorInsight';
+import Calendar from '../components/Calendario';
+import CardClima from '../components/CardClima';
+import CardMoeda from '../components/CardMoeda';
+import Chatbot from '../components/Chatbot';
+import ConversorMoedas from '../components/ConversorMoedas';
+import GeradorInsight from '../components/GeradorInsight';
 
 function Dashboard() {
   const [data, setData] = useState(null);
