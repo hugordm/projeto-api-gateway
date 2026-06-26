@@ -224,7 +224,11 @@ function Dashboard() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {data.moedas.map((moeda) => (
-            <CardMoeda key={moeda.id} moeda={moeda} />
+            <CardMoeda
+              key={moeda.id}
+              moeda={moeda}
+              periodo={periodo}
+            />
           ))}
         </div>
       </div>

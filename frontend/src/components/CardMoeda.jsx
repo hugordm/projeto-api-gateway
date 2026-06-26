@@ -7,7 +7,7 @@ import {
   YAxis,
 } from 'recharts';
 
-function CardMoeda({ moeda }) {
+function CardMoeda({ moeda, periodo }) {
   const dadosGrafico =
     moeda.historico?.map((item) => ({
       dia: item.data,
@@ -16,6 +16,30 @@ function CardMoeda({ moeda }) {
 
   const ehPositivo = moeda.variacao?.startsWith('+');
   const corGrafico = ehPositivo ? '#10b981' : '#f43f5e';
+
+  const formatarPeriodo = (inicio, fim) => {
+    if (!inicio || !fim) return '';
+
+    const mesmoMes =
+      inicio.getMonth() === fim.getMonth() &&
+      inicio.getFullYear() === fim.getFullYear();
+
+    if (mesmoMes) {
+      return `${inicio.getDate()}–${fim.getDate()} de ${inicio.toLocaleDateString(
+        'pt-BR',
+        { month: 'long' }
+      )} de ${inicio.getFullYear()}`;
+    }
+
+    return `${inicio.toLocaleDateString('pt-BR', {
+      day: 'numeric',
+      month: 'long',
+    })} – ${fim.toLocaleDateString('pt-BR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })}`;
+  };
 
   return (
     <div className="bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors p-6 rounded-2xl flex flex-col gap-4 shadow-lg">
@@ -32,14 +56,17 @@ function CardMoeda({ moeda }) {
           <p className="text-3xl font-black text-white mt-1">
             R$ {Number(moeda.valor).toFixed(2)}
           </p>
+
+          <p className="text-xs text-slate-400 mt-2">
+            {formatarPeriodo(periodo.inicio, periodo.fim)}
+          </p>
         </div>
 
         <span
-          className={`px-3 py-1 rounded-full text-sm font-bold ${
-            ehPositivo
+          className={`px-3 py-1 rounded-full text-sm font-bold ${ehPositivo
               ? 'bg-emerald-500/10 text-emerald-400'
               : 'bg-rose-500/10 text-rose-400'
-          }`}
+            }`}
         >
           {moeda.variacao}
         </span>
@@ -52,7 +79,7 @@ function CardMoeda({ moeda }) {
               <XAxis
                 dataKey="dia"
                 tickFormatter={(data) => {
-                  const [mes, dia] = data.split('-');
+                  const [ano, mes, dia] = data.split('-');
                   return `${dia}/${mes}`;
                 }}
                 tick={{
@@ -71,8 +98,11 @@ function CardMoeda({ moeda }) {
                   color: '#fff',
                 }}
                 labelFormatter={(data) => {
-                  const [mes, dia] = data.split('-');
-                  return `${dia}/${mes}`;
+                  return new Date(data).toLocaleDateString('pt-BR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  });
                 }}
               />
 
