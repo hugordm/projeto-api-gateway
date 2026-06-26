@@ -234,16 +234,21 @@ O front-end vai rodar em: `http://localhost:5173`
 
 ## ☁️ Deploy (Produção)
 
-### Back-end — Firebase Cloud Functions
-O servidor está hospedado no Firebase e disponível em:
+### Back-end — Render
+O servidor está hospedado no Render e disponível em:
 ```
-[URL a ser preenchida após o deploy]
+https://projeto-api-gateway.onrender.com
+```
+
+Endpoint principal:
+```
+https://projeto-api-gateway.onrender.com/api/dashboard?cidade=SaoPaulo&moeda=BRL
 ```
 
 ### Front-end — Vercel
 A interface está disponível publicamente em:
 ```
-[URL a ser preenchida após o deploy]
+https://projeto-api-gateway.vercel.app
 ```
 
 > Para rodar localmente, siga as instruções da seção "Como Instalar e Rodar" acima.
