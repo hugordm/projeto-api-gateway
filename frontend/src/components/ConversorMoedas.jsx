@@ -25,6 +25,7 @@ function ConversorMoedas() {
   const convertCurrency = useCallback(async () => {
     if (!amount || parseFloat(amount) <= 0) {
       setError('Digite um valor válido.');
+      setTimeout(() => setError(null), 3000);
       return;
     }
 
@@ -56,6 +57,8 @@ function ConversorMoedas() {
   const handleSwap = () => {
     setFromCurrency(toCurrency);
     setToCurrency(fromCurrency);
+    convertCurrency();
+
   };
 
   const getCurrencyFlag = (code) => {
@@ -268,78 +271,78 @@ function ConversorMoedas() {
             {loading ? '🔄 Convertendo...' : '↻  Converter'}
           </button>
 
-          {error && (
+          {error ? (
             <div
               className="
-                        bg-red-500/10
-                        border
-                        border-red-500/30
-                        text-red-400
-                        rounded-xl
-                        px-4
-                        py-3
-                        text-sm
-                    "
+      bg-red-500/10
+      border
+      border-red-500/30
+      text-red-400
+      rounded-xl
+      px-4
+      py-3
+      text-sm
+    "
             >
               ❌ {error}
             </div>
-          )}
-
-          {convertedAmount && (
-            <div
-              className="
-                        mt-5
-                        bg-[#0f2230]
-                        border
-                        border-[#164e45]
-                        rounded-2xl
-                        p-5"
-            >
-              <p
-                className="
-                            text-[#20c997]
-                            text-sm
-                            font-bold
-                            uppercase"
-              >
-                Conversão
-              </p>
-
-              <p
-                className="
-                            mt-4
-                            text-[#b7c7e6]
-                            text-lg"
-              >
-                {getCurrencyFlag(fromCurrency)} {parseFloat(amount).toFixed(2)}{' '}
-                {fromCurrency}
-              </p>
-
-              <p
-                className="
-                            text-4xl
-                            font-bold
-                            text-[#20c997]
-                            mt-2"
-              >
-                {getCurrencyFlag(toCurrency)} {convertedAmount} {toCurrency}
-              </p>
-
+          ) : (
+            convertedAmount && (
               <div
                 className="
-                            border-t
-                            border-[#243047]
-                            mt-5
-                            pt-4
-                            text-sm
-                            text-[#9fb2d1]"
+        mt-5
+        bg-[#0f2230]
+        border
+        border-[#164e45]
+        rounded-2xl
+        p-5"
               >
-                <span className="text-[#20c997] font-semibold">
-                  Taxa de câmbio
-                </span>
-                <br />1 {fromCurrency} = {rate} {toCurrency}
+                <p
+                  className="
+          text-[#20c997]
+          text-sm
+          font-bold
+          uppercase"
+                >
+                  Conversão
+                </p>
+
+                <p
+                  className="
+          mt-4
+          text-[#b7c7e6]
+          text-lg"
+                >
+                  {getCurrencyFlag(fromCurrency)} {parseFloat(amount).toFixed(2)}{' '}
+                  {fromCurrency}
+                </p>
+
+                <p
+                  className="
+          text-4xl
+          font-bold
+          text-[#20c997]
+          mt-2"
+                >
+                  {getCurrencyFlag(toCurrency)} {convertedAmount} {toCurrency}
+                </p>
+
+                <div
+                  className="
+          border-t
+          border-[#243047]
+          mt-5
+          pt-4
+          text-sm
+          text-[#9fb2d1]"
+                >
+                  <span className="text-[#20c997] font-semibold">
+                    Taxa de câmbio
+                  </span>
+                  <br />1 {fromCurrency} = {rate} {toCurrency}
+                </div>
               </div>
-            </div>
+            )
           )}
         </div>
       </div>

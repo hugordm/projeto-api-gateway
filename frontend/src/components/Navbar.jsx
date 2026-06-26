@@ -31,7 +31,7 @@ export default function Navbar({ onFocusForm }) {
             rel="noreferrer"
             className="hover:text-black transition-colors flex items-center gap-1.5"
           >
-            <FileText size={18} /> Documentação
+            
           </a>
         </div>
 
