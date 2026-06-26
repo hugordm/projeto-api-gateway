@@ -5,25 +5,26 @@ const Anthropic = require("@anthropic-ai/sdk"); // SDK da Claude
 // cria o cliente da Claude com a chave do .env
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-// URL da API de moedas vem do .env
-const MOEDAS_URL = process.env.MOEDAS_URL || "";
-
 const chat = async (req, res) => {
     try {
-        // pega a pergunta do usuário do body da requisição
-        const { pergunta, cidade, moeda } = req.body;
+        // pega a pergunta, cidade, moeda e moedas do body da requisição
+        const { pergunta, cidade, moeda, moedas } = req.body;
 
         // valida se a pergunta foi enviada
         if (!pergunta) {
             return res.status(400).json({ erro: "Pergunta é obrigatória." });
         }
 
-        // pega a cidade e moeda ou usa padrão
+        // pega a cidade, moeda e moedas ou usa padrão
         const cidade_ = cidade || "São Paulo";
         const moeda_ = moeda || "USD";
+        const moedas_param = moedas || "BRL,EUR";
 
         // monta a URL do clima dinamicamente
         const CLIMA_URL = `https://api.openweathermap.org/data/2.5/weather?q=${cidade_}&appid=${process.env.CLIMA_API_KEY}&units=metric&lang=pt_br`;
+
+        // monta a URL de moedas dinamicamente com as moedas escolhidas
+        const MOEDAS_URL = `https://api.frankfurter.app/latest?from=USD&to=${moedas_param}`;
 
         // busca clima e moedas em paralelo para ter contexto
         const [climaResult, moedasResult] = await Promise.allSettled([
@@ -33,7 +34,10 @@ const chat = async (req, res) => {
 
         // pega os dados ou null se falhar
         const clima = climaResult.status === "fulfilled" ? climaResult.value.data : null;
-        const moedas = moedasResult.status === "fulfilled" ? moedasResult.value.data : null;
+        const moedasData = moedasResult.status === "fulfilled" ? moedasResult.value.data : null;
+
+        // monta o resumo de todas as moedas disponíveis
+        const moedasResumo = moedasData ? Object.entries(moedasData.rates).map(([cod, val]) => `${cod}: ${val}`).join(", ") : "indisponível";
 
         // monta o contexto com os dados reais para a Claude
         const contexto = `
@@ -43,8 +47,7 @@ const chat = async (req, res) => {
 
             Dados atuais:
             - Clima em ${cidade_}: ${clima ? `${clima.main.temp}°C, ${clima.weather[0].description}, umidade ${clima.main.humidity}%` : "indisponível"}
-            - Dólar (USD/BRL): ${moedas ? moedas.rates.BRL : "indisponível"}
-            - Euro (EUR/BRL): ${moedas ? moedas.rates.EUR : "indisponível"}
+            - Moedas (em relação ao USD): ${moedasResumo}
             - Moeda de interesse do usuário: ${moeda_}
 
             Pergunta do usuário: ${pergunta}
@@ -67,8 +70,7 @@ const chat = async (req, res) => {
                 cidade: cidade_,
                 moeda: moeda_,
                 clima: clima ? `${clima.main.temp}°C` : "indisponível",
-                dolar: moedas ? moedas.rates.BRL : "indisponível",
-                euro: moedas ? moedas.rates.EUR : "indisponível"
+                moedas: moedasResumo
             }
         });
 
