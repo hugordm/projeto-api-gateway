@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Calendar from './Calendario';
 import CardClima from './CardClima';
 import CardMoeda from './CardMoeda';
+import Chatbot from './Chatbot';
 import GeradorInsight from './GeradorInsight';
 
 function Dashboard() {
@@ -231,6 +232,8 @@ function Dashboard() {
       <div className="flex flex-col gap-4">
         <GeradorInsight fetchInsight={buscarInsightNaAPI} />
       </div>
+
+      <Chatbot />
     </div>
   );
 }
