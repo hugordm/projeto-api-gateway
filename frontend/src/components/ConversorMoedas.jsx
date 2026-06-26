@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 function ConversorMoedas() {
   const [amount, setAmount] = useState('');
@@ -22,10 +22,9 @@ function ConversorMoedas() {
     { code: 'ARS', name: 'Peso Argentino', flag: '🇦🇷' },
   ];
 
-  const convertCurrency = useCallback(async () => {
+  const convertCurrency = async () => {
     if (!amount || parseFloat(amount) <= 0) {
       setError('Digite um valor válido.');
-      setTimeout(() => setError(null), 3000);
       return;
     }
 
@@ -52,20 +51,32 @@ function ConversorMoedas() {
     } finally {
       setLoading(false);
     }
-  }, [amount, fromCurrency, toCurrency]);
+  };
 
   const handleSwap = () => {
     setFromCurrency(toCurrency);
     setToCurrency(fromCurrency);
-    convertCurrency();
+  };
 
+  const getCurrencyName = (code) => {
+    const currency = currencies.find(c => c.code === code);
+    return currency ? currency.name : code;
   };
 
   const getCurrencyFlag = (code) => {
-    const currency = currencies.find((c) => c.code === code);
+    const currency = currencies.find(c => c.code === code);
     return currency ? currency.flag : '';
   };
 
+  useEffect(() => {
+    // Converte automaticamente quando os valores mudam (opcional)
+    if (amount && parseFloat(amount) > 0) {
+      const timeout = setTimeout(() => {
+        convertCurrency();
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [amount, fromCurrency, toCurrency]);
   return (
     <div className="w-full flex justify-center">
       <div
