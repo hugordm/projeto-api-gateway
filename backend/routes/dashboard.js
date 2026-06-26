@@ -3,6 +3,7 @@ const { getDashboard, getHistorico, getInsight } = require("../services/dashboar
 const { getClima } = require("../controllers/climaController"); // importa a função do climaController
 const { getGeocoding } = require("../controllers/geocodingController"); // importa a função do geocodingController
 const { chat } = require("../controllers/chatController");
+const { getFeriados } = require("../controllers/calendarioController"); // importa a função do calendarioController
 
 const router = Router(); // cria o roteador
 
@@ -24,4 +25,7 @@ router.post("/chat", chat);
 // rota de insight — gera análise da Claude sob demanda
 router.get("/insight", getInsight);
 
-module.exports = router; // exporta o roteador para o app.js usar\
+// rota do calendário — retorna feriados nacionais via BrasilAPI
+router.get("/calendario", getFeriados);
+
+module.exports = router; // exporta o roteador para o app.js usar
