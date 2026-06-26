@@ -28,7 +28,6 @@ export default function Home() {
 
       <main className="w-full flex-1 overflow-y-auto flex items-center justify-center px-4 sm:px-6 md:px-12 lg:px-16 py-3 md:py-4">
         <div className="w-full max-w-7xl flex flex-col lg:flex-row items-stretch justify-center gap-4 lg:gap-6">
-          {/* Painel Esquerdo: Textos e Banner */}
           <div className="w-full lg:w-[62%] bg-[#FDFCF6] border-[3px] border-[#1A1A1A] rounded-3xl lg:rounded-4xl flex flex-col overflow-hidden shadow-sm">
             <div className="flex-1 mx-2 mt-2 mb-1 bg-[#C9B6EB] rounded-2xl lg:rounded-3xl p-5 lg:px-8 lg:py-6 flex flex-col sm:flex-row lg:flex-row items-center relative overflow-hidden gap-4">
               <div className="w-full sm:w-[60%] lg:w-[55%] space-y-3 lg:space-y-4 z-10 flex flex-col justify-center h-full">
@@ -88,7 +87,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Painel Direito: Formulário */}
           <div className="w-full lg:w-[38%] bg-white border-[3px] border-[#1A1A1A] rounded-3xl lg:rounded-4xl p-5 sm:p-6 lg:p-8 flex flex-col justify-center relative shadow-[4px_4px_0px_#1A1A1A]">
             <div className="mb-3 lg:mb-4">
               <h2 className="font-display text-xl sm:text-2xl font-extrabold text-[#1A1A1A] mb-1 tracking-tight">
