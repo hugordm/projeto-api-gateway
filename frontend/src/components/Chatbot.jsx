@@ -2,6 +2,7 @@ import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Bot, Loader2, MessageCircle, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 function Chatbot() {
   const [aberto, setAberto] = useState(false);
@@ -99,13 +100,13 @@ function Chatbot() {
               {mensagens.map((msg, index) => (
                 <div
                   key={index}
-                  className={`max-w-[85%] p-3 rounded-xl text-sm leading-relaxed ${
+                  className={`max-w-[85%] p-3 rounded-xl text-sm leading-relaxed prose prose-invert ${
                     msg.autor === 'user'
                       ? 'bg-[#c8b7e9] text-slate-900 self-end rounded-br-none'
                       : 'bg-slate-800 text-slate-200 border border-slate-700 self-start rounded-bl-none'
                   }`}
                 >
-                  {msg.texto}
+                  <ReactMarkdown>{msg.texto}</ReactMarkdown>
                 </div>
               ))}
 
