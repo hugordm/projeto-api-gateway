@@ -27,7 +27,7 @@ function CardMoeda({ moeda, periodo }) {
     if (mesmoMes) {
       return `${inicio.getDate()}–${fim.getDate()} de ${inicio.toLocaleDateString(
         'pt-BR',
-        { month: 'long' }
+        { month: 'long' },
       )} de ${inicio.getFullYear()}`;
     }
 
@@ -63,10 +63,11 @@ function CardMoeda({ moeda, periodo }) {
         </div>
 
         <span
-          className={`px-3 py-1 rounded-full text-sm font-bold ${ehPositivo
+          className={`px-3 py-1 rounded-full text-sm font-bold ${
+            ehPositivo
               ? 'bg-emerald-500/10 text-emerald-400'
               : 'bg-rose-500/10 text-rose-400'
-            }`}
+          }`}
         >
           {moeda.variacao}
         </span>
@@ -79,6 +80,7 @@ function CardMoeda({ moeda, periodo }) {
               <XAxis
                 dataKey="dia"
                 tickFormatter={(data) => {
+                  // eslint-disable-next-line no-unused-vars
                   const [ano, mes, dia] = data.split('-');
                   return `${dia}/${mes}`;
                 }}
