@@ -1,16 +1,23 @@
 import { useEffect, useState } from 'react';
 
-export default function Calendar({ onRangeChange }) {
+export default function Calendar({ periodoInicial, onRangeChange }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [holidays, setHolidays] = useState([]);
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(
+    periodoInicial?.inicio || null
+  );
+
+  const [endDate, setEndDate] = useState(
+    periodoInicial?.fim || null
+  );
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
-    fetch(`https://brasilapi.com.br/api/feriados/v1/${currentDate.getFullYear()}`)
-      .then(r => r.json()).then(setHolidays).catch(console.error);
+    fetch(`${import.meta.env.VITE_API_URL}/api/calendario?ano=${currentDate.getFullYear()}`)
+      .then((r) => r.json())
+      .then(setHolidays)
+      .catch(console.error);
   }, [currentDate]);
 
   useEffect(() => {
@@ -96,7 +103,7 @@ export default function Calendar({ onRangeChange }) {
         {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(d => <span key={d}>{d}</span>)}
       </div>
 
-      <div className="grid grid-cols-7 gap-y-1 select-none">
+      <div className="grid grid-cols-7 gap-1 select-none">
         {days.map((day, i) => {
           if (!day) return <div key={i} className="h-10"></div>;
           const holiday = isHoliday(day);
@@ -107,13 +114,38 @@ export default function Calendar({ onRangeChange }) {
               onMouseDown={() => handleMouseDown(day)}
               onMouseEnter={() => handleEnter(day)}
               onMouseUp={() => setIsDragging(false)}
-              className={`h-10 w-full flex items-center justify-center transition
-            ${inRange(day) ? "bg-blue-200 text-slate-900" : ""}
-            ${isStart(day) ? "rounded-l-full bg-blue-600 text-white" : ""}
-            ${isEnd(day) ? "rounded-r-full bg-blue-600 text-white" : ""}
-            ${holiday && !inRange(day) ? "border border-red-400 text-red-400" : ""}
-            ${!holiday && !inRange(day) ? "hover:bg-slate-700" : ""}`}
-            >{day}</button>
+              className={`
+    relative h-11 w-full flex items-center justify-center
+    transition-all duration-200
+
+    ${inRange(day)
+                  ? "bg-blue-200 text-slate-900"
+                  : "text-slate-200 hover:bg-slate-700"
+                }
+
+    ${isStart(day)
+                  ? "bg-indigo-600 text-white rounded-l-full shadow-md z-10"
+                  : ""
+                }
+
+    ${isEnd(day)
+                  ? "bg-indigo-600 text-white rounded-r-full shadow-md z-10"
+                  : ""
+                }
+
+    ${isStart(day) && isEnd(day)
+                  ? "rounded-full"
+                  : ""
+                }
+
+    ${holiday && !inRange(day)
+                  ? "border border-red-400 text-red-400"
+                  : ""
+                }
+  `}
+            >
+              {day}
+            </button>
           )
         })}
       </div>

@@ -4,6 +4,7 @@ const { getClima } = require("../controllers/climaController"); // importa a fun
 const { getGeocoding } = require("../controllers/geocodingController"); // importa a função do geocodingController
 const { chat } = require("../controllers/chatController");
 const { getFeriados } = require("../controllers/calendarioController"); // importa a função do calendarioController
+const { conversorMoeda } = require("../services/conversorServices");
 
 const router = Router(); // cria o roteador
 
@@ -27,5 +28,8 @@ router.get("/insight", getInsight);
 
 // rota do calendário — retorna feriados nacionais via BrasilAPI
 router.get("/calendario", getFeriados);
+
+// rota do conversor de moedas
+router.get("/conversorMoeda", conversorMoeda);
 
 module.exports = router; // exporta o roteador para o app.js usar

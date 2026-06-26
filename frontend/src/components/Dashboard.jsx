@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Calendar from './Calendario';
 import CardClima from './CardClima';
 import CardMoeda from './CardMoeda';
+import Chatbot from './Chatbot';
 import GeradorInsight from './GeradorInsight';
 
 function Dashboard() {
@@ -223,7 +224,11 @@ function Dashboard() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {data.moedas.map((moeda) => (
-            <CardMoeda key={moeda.id} moeda={moeda} />
+            <CardMoeda
+              key={moeda.id}
+              moeda={moeda}
+              periodo={periodo}
+            />
           ))}
         </div>
       </div>
@@ -231,6 +236,8 @@ function Dashboard() {
       <div className="flex flex-col gap-4">
         <GeradorInsight fetchInsight={buscarInsightNaAPI} />
       </div>
+
+      <Chatbot />
     </div>
   );
 }

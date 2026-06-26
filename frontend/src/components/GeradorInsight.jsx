@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import { Loader2, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 function GeradorInsight({ fetchInsight }) {
   const [status, setStatus] = useState('idle');
   const [textoExibido, setTextoExibido] = useState('');
-
   const [textoIA, setTextoIA] = useState('');
 
   const gerarInsight = async () => {
@@ -16,9 +16,7 @@ function GeradorInsight({ fetchInsight }) {
       setStatus('typing');
     } catch (error) {
       console.error(error);
-      setTextoIA(
-        'Não foi possível gerar a análise no momento. Tente novamente mais tarde.',
-      );
+      setTextoIA('Não foi possível gerar a análise no momento.');
       setStatus('typing');
     }
   };
@@ -33,7 +31,7 @@ function GeradorInsight({ fetchInsight }) {
           clearInterval(interval);
           setStatus('done');
         }
-      }, 30);
+      }, 15);
 
       return () => clearInterval(interval);
     }
@@ -87,12 +85,16 @@ function GeradorInsight({ fetchInsight }) {
             )}
           </div>
 
-          <p className="text-slate-300 leading-relaxed text-lg font-mono">
-            {textoExibido}
-            {status === 'typing' && (
+          {status === 'typing' ? (
+            <p className="text-slate-300 leading-relaxed text-lg font-mono">
+              {textoExibido}
               <span className="animate-pulse border-r-2 border-[#c8b7e9] ml-1" />
-            )}
-          </p>
+            </p>
+          ) : (
+            <div className="text-slate-300 leading-relaxed text-lg">
+              <ReactMarkdown>{textoIA}</ReactMarkdown>
+            </div>
+          )}
         </motion.div>
       )}
     </div>
