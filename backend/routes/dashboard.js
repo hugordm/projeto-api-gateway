@@ -4,7 +4,7 @@ const { getClima } = require("../controllers/climaController"); // importa a fun
 const { getGeocoding } = require("../controllers/geocodingController"); // importa a função do geocodingController
 const { chat } = require("../controllers/chatController");
 const { getFeriados } = require("../controllers/calendarioController"); // importa a função do calendarioController
-const { conversorMoeda } = require("../services/ConversorServices");
+const { conversorMoeda } = require("../services/conversorServices");
 
 const router = Router(); // cria o roteador
 
