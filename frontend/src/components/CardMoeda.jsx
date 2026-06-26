@@ -1,21 +1,31 @@
-import { Line, LineChart, ResponsiveContainer, Tooltip, YAxis, XAxis } from 'recharts';
+import {
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  Tooltip,
+  YAxis,
+  XAxis,
+} from 'recharts';
 
 function CardMoeda({ moeda }) {
-  const dadosGrafico = moeda.historico.map((item) => ({
+  const dadosGrafico = moeda.historico?.slice(-15).map((item) => ({
     dia: item.data,
-    valor: item.valor,
-  }));
+    valor: Number(item.valor),
+  })) || [];
 
   const ehPositivo = moeda.variacao?.startsWith('+');
+  const corGrafico = ehPositivo ? '#10b981' : '#f43f5e';
 
   return (
-    <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col gap-4">
+    <div className="bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors p-6 rounded-2xl flex flex-col gap-4 shadow-lg">
+
       <div className="flex justify-between items-start">
         <div>
-          <h3 className="text-slate-100 font-bold text-xl">
-            {moeda.nome}{' '}
-            <span className="text-slate-500 text-sm">
-              ({moeda.codigo})
+          <h3 className="text-slate-100 font-bold text-xl flex items-center gap-2">
+            {moeda.nome}
+
+            <span className="text-slate-500 text-sm font-normal bg-slate-800 px-2 py-0.5 rounded-md">
+              {moeda.codigo}
             </span>
           </h3>
 
@@ -26,18 +36,21 @@ function CardMoeda({ moeda }) {
 
         <span
           className={`px-3 py-1 rounded-full text-sm font-bold ${ehPositivo
-            ? 'bg-emerald-500/10 text-emerald-400'
-            : 'bg-rose-500/10 text-rose-400'
+              ? 'bg-emerald-500/10 text-emerald-400'
+              : 'bg-rose-500/10 text-rose-400'
             }`}
         >
-          {moeda.variacao || '0%'}
+          {moeda.variacao}
         </span>
       </div>
 
-      <div className="h-32 w-full mt-4">
+
+      <div className="h-32 w-full mt-2">
+
         {dadosGrafico.length > 1 ? (
+
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={dadosGrafico}>
+            <AreaChart data={dadosGrafico}>
 
               <XAxis
                 dataKey="dia"
@@ -51,17 +64,14 @@ function CardMoeda({ moeda }) {
                 }}
               />
 
-              <YAxis domain={['dataMin', 'dataMax']} hide />
+              <YAxis hide domain={['dataMin', 'dataMax']} />
 
               <Tooltip
                 contentStyle={{
                   backgroundColor: '#0f172a',
-                  border: 'none',
+                  border: '1px solid #1e293b',
                   borderRadius: '8px',
                   color: '#fff',
-                }}
-                itemStyle={{
-                  color: '#c8b7e9',
                 }}
                 labelFormatter={(data) => {
                   const [ano, mes, dia] = data.split("-");
@@ -69,26 +79,29 @@ function CardMoeda({ moeda }) {
                 }}
               />
 
-              <Line
+              <Area
                 type="monotone"
                 dataKey="valor"
-                stroke={ehPositivo ? '#10b981' : '#f43f5e'}
+                stroke={corGrafico}
+                fill={corGrafico}
+                fillOpacity={0.2}
                 strokeWidth={3}
-                dot={false}
-                activeDot={{
-                  r: 6,
-                  fill: '#c8b7e9',
-                }}
               />
 
-            </LineChart>
+            </AreaChart>
+
           </ResponsiveContainer>
+
         ) : (
-          <div className="h-full flex items-center justify-center text-slate-500 text-sm">
+
+          <div className="h-full flex items-center justify-center text-slate-500 text-sm bg-slate-800/30 rounded-lg">
             Histórico indisponível
           </div>
+
         )}
+
       </div>
+
     </div>
   );
 }
