@@ -9,7 +9,7 @@ const port = 8000;
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://projeto-api-gateway.vercel.app"
+    "https://projeto-api-gateway-topaz.vercel.app"
   ],
   methods: ["GET"],
 }));
