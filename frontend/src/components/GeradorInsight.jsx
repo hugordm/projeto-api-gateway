@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import { Loader2, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-function GeradorInsight({ fetchInsight }) {
-  const [status, setStatus] = useState('idle');
+function GeradorInsight({ textoIA }) {
+  const [status, setStatus] = useState('loading');
   const [textoExibido, setTextoExibido] = useState('');
   const [textoIA, setTextoIA] = useState('');
 
@@ -36,6 +36,12 @@ function GeradorInsight({ fetchInsight }) {
       return () => clearInterval(interval);
     }
   }, [status, textoIA]);
+
+  useEffect(() => {
+  if (textoIA) {
+    setStatus('typing');
+  }
+}, [textoIA]);
 
   return (
     <div className="w-full mt-8 flex flex-col items-center gap-6">
