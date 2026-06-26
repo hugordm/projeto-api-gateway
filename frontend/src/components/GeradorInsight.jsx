@@ -3,7 +3,7 @@ import { Loader2, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 function GeradorInsight({ textoIA }) {
-  const [status, setStatus] = useState('idle');
+  const [status, setStatus] = useState('loading');
   const [textoExibido, setTextoExibido] = useState('');
 
   const gerarInsight = () => {
@@ -27,6 +27,12 @@ function GeradorInsight({ textoIA }) {
       return () => clearInterval(interval);
     }
   }, [status, textoIA]);
+
+  useEffect(() => {
+  if (textoIA) {
+    setStatus('typing');
+  }
+}, [textoIA]);
 
   return (
     <div className="w-full mt-8 flex flex-col items-center gap-6">
