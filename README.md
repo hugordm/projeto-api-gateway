@@ -123,7 +123,6 @@ projeto-api-gateway/
 ## ✨ Funcionalidades
 
 - ✅ **Mapa interativo** com Leaflet/OpenStreetMap
-- ✅ Clique no mapa para buscar dados do clima
 - ✅ Exibição de **temperatura, umidade e vento**
 - ✅ Previsão para o **dia seguinte**
 - ✅ **Indicação visual** do local selecionado
@@ -131,6 +130,10 @@ projeto-api-gateway/
 - ✅ **Integração com API** externa 
 - ✅ **Arquitetura limpa** 
 - ✅ **Insight gerado por IA** com análise do clima e câmbio em linguagem natural
+- ✅ **Calendário integrado** para visualização de datas
+- ✅ **Assistente de IA** para perguntas e análises em linguagem natural
+- ✅ **Múltiplas moedas** disponíveis para consulta
+- ✅ **Conversor de moedas** em tempo real
 
 
 ## 📋 Pré-requisitos
@@ -248,7 +251,7 @@ https://projeto-api-gateway.onrender.com/api/dashboard?cidade=SaoPaulo&moeda=BRL
 ### Front-end — Vercel
 A interface está disponível publicamente em:
 ```
-https://projeto-api-gateway.vercel.app
+https://projeto-api-gateway-topaz.vercel.app
 ```
 
 > Para rodar localmente, siga as instruções da seção "Como Instalar e Rodar" acima.
