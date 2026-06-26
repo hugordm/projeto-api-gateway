@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function ConversorMoedas() {
   const [amount, setAmount] = useState('');
@@ -58,13 +58,8 @@ function ConversorMoedas() {
     setToCurrency(fromCurrency);
   };
 
-  const getCurrencyName = (code) => {
-    const currency = currencies.find(c => c.code === code);
-    return currency ? currency.name : code;
-  };
-
   const getCurrencyFlag = (code) => {
-    const currency = currencies.find(c => c.code === code);
+    const currency = currencies.find((c) => c.code === code);
     return currency ? currency.flag : '';
   };
 
@@ -76,6 +71,7 @@ function ConversorMoedas() {
       }, 500);
       return () => clearTimeout(timeout);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount, fromCurrency, toCurrency]);
   return (
     <div className="w-full flex justify-center">
@@ -324,8 +320,8 @@ function ConversorMoedas() {
           text-[#b7c7e6]
           text-lg"
                 >
-                  {getCurrencyFlag(fromCurrency)} {parseFloat(amount).toFixed(2)}{' '}
-                  {fromCurrency}
+                  {getCurrencyFlag(fromCurrency)}{' '}
+                  {parseFloat(amount).toFixed(2)} {fromCurrency}
                 </p>
 
                 <p

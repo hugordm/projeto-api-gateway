@@ -110,6 +110,7 @@ exibe o Dashboard unificado
 
 ## 📁 Estrutura do Projeto
 
+```
 projeto-api-gateway/
 ├── backend/
 │ ├── app.js
@@ -133,6 +134,7 @@ projeto-api-gateway/
 │ ├── CardClima.jsx
 │ └── CardMoeda.jsx
 └── README.md
+```
 
 ## ✨ Funcionalidades
 
