@@ -6,6 +6,7 @@ import CardClima from './CardClima';
 import CardMoeda from './CardMoeda';
 import Chatbot from './Chatbot';
 import GeradorInsight from './GeradorInsight';
+import ConversorMoedas from './ConversorMoedas';
 
 function Dashboard() {
   const [data, setData] = useState(null);
@@ -230,13 +231,15 @@ function Dashboard() {
               periodo={periodo}
             />
           ))}
+        
         </div>
+        
+        <ConversorMoedas/>
       </div>
 
       <div className="flex flex-col gap-4">
         <GeradorInsight fetchInsight={buscarInsightNaAPI} />
       </div>
-
       <Chatbot />
     </div>
   );
