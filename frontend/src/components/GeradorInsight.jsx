@@ -2,9 +2,10 @@ import { motion } from 'framer-motion';
 import { Loader2, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-function GeradorInsight({ textoIA }) {
-  const [status, setStatus] = useState('loading');
+function GeradorInsight({ fetchInsight }) {
+  const [status, setStatus] = useState('idle');
   const [textoExibido, setTextoExibido] = useState('');
+
   const [textoIA, setTextoIA] = useState('');
 
   const gerarInsight = async () => {
@@ -33,15 +34,10 @@ function GeradorInsight({ textoIA }) {
           setStatus('done');
         }
       }, 30);
+
       return () => clearInterval(interval);
     }
   }, [status, textoIA]);
-
-  useEffect(() => {
-  if (textoIA) {
-    setStatus('typing');
-  }
-}, [textoIA]);
 
   return (
     <div className="w-full mt-8 flex flex-col items-center gap-6">
@@ -80,8 +76,11 @@ function GeradorInsight({ textoIA }) {
             </h3>
             {status === 'done' && (
               <button
-                onClick={() => setStatus('idle')}
-                className="text-xs text-slate-400 hover:text-white transition-colors"
+                onClick={() => {
+                  setStatus('idle');
+                  setTextoExibido('');
+                }}
+                className="text-xs text-slate-400 hover:text-white transition-colors cursor-pointer"
               >
                 Gerar novamente
               </button>
