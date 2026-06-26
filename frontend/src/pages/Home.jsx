@@ -27,8 +27,9 @@ export default function Home() {
   const buscarCoordenadas = async (nomeCidade) => {
     if (!nomeCidade || nomeCidade.length < 3) return;
     try {
+      const urlBase = import.meta.env.VITE_API_URL;
       const resposta = await fetch(
-        `http://localhost:8000/api/geocoding?cidade=${encodeURIComponent(nomeCidade)}`,
+        `${urlBase}/api/geocoding?cidade=${encodeURIComponent(nomeCidade)}`,
       );
       const dados = await resposta.json();
       if (dados.lat && dados.lon) {
