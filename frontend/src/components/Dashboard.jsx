@@ -10,18 +10,22 @@ function Dashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState(null);
+
   const [periodo, setPeriodo] = useState({
     inicio: new Date("2026-01-01"),
     fim: new Date("2026-06-24"),
   });
 
   const nomeUsuario = localStorage.getItem('userName') || '';
-  const formatDate = (date) => date.toISOString().split("T")[0];
+
+  const formatDate = (date) =>
+    date.toISOString().split("T")[0];
 
   useEffect(() => {
     async function buscarDashboard() {
       try {
         setLoading(true);
+        setErro(null);
 
         const cidade =
           localStorage.getItem("userCity") || "São Paulo";
@@ -29,14 +33,12 @@ function Dashboard() {
         const moeda =
           localStorage.getItem("userCurrency") || "USD";
 
-        // Busca dados atuais
         const dashboardResponse = await axios.get(
           `http://localhost:8000/api/dashboard?cidade=${encodeURIComponent(
             cidade
           )}&moeda=${moeda}`
         );
 
-        // Define período do histórico
         const inicio = periodo.inicio
           ? formatDate(periodo.inicio)
           : "2026-01-01";
@@ -45,7 +47,6 @@ function Dashboard() {
           ? formatDate(periodo.fim)
           : "2026-06-24";
 
-        // Busca histórico conforme o período
         const historicoResponse = await axios.get(
           "http://localhost:8000/api/historico",
           {
@@ -58,6 +59,43 @@ function Dashboard() {
 
         const dados = dashboardResponse.data;
         const historico = historicoResponse.data;
+
+        const calcularVariacao = (historico) => {
+          if (!historico || historico.length < 2) {
+            return "+0%";
+          }
+
+          const valorAtual =
+            historico[historico.length - 1].valor;
+
+          const valorAnterior =
+            historico[historico.length - 2].valor;
+
+          if (!valorAnterior) {
+            return "+0%";
+          }
+
+          const variacao =
+            ((valorAtual - valorAnterior) / valorAnterior) * 100;
+
+          return `${variacao >= 0 ? "+" : ""}${variacao.toFixed(2)}%`;
+        };
+
+        const historicoUSD = Object.entries(historico.rates).map(
+          ([data, valor]) => ({
+            data,
+            valor: valor.BRL,
+          })
+        );
+
+        const historicoEUR = Object.entries(historico.rates).map(
+          ([data, valor]) => ({
+            data,
+            valor: Number(
+              (valor.BRL / dados.moedas.rates.EUR).toFixed(2)
+            ),
+          })
+        );
 
         const dashboardFormatado = {
           insight: dados.insight,
@@ -80,59 +118,49 @@ function Dashboard() {
               nome: "Dólar",
               codigo: "USD",
               valor: dados.moedas.rates.BRL.toFixed(2),
-              variacao: "+0%",
-
-              historico: Object.entries(historico.rates).map(
-                ([data, valor]) => ({
-                  data,
-                  valor: valor.BRL,
-                })
-              ),
+              variacao: calcularVariacao(historicoUSD),
+              historico: historicoUSD,
             },
 
             {
               id: 2,
               nome: "Euro",
               codigo: "EUR",
-
               valor: (
                 dados.moedas.rates.BRL /
                 dados.moedas.rates.EUR
               ).toFixed(2),
-
-              variacao: "+0%",
-
-              historico: Object.entries(historico.rates).map(
-                ([data, valor]) => ({
-                  data,
-                  valor: valor.BRL / valor.EUR,
-                })
-              ),
+              variacao: calcularVariacao(historicoEUR),
+              historico: historicoEUR,
             },
           ],
         };
 
         setData(dashboardFormatado);
+
       } catch (error) {
         console.error(error);
         setErro(error.message);
+
       } finally {
         setLoading(false);
       }
     }
 
     buscarDashboard();
+
   }, [periodo]);
 
 
-
   if (!data) {
-  return (
-    <div className="w-full max-w-6xl p-8 text-slate-400">
-      Carregando dados...
-    </div>
-  );
-}
+    return (
+      <div className="w-full max-w-6xl bg-white p-8 rounded-3xl shadow-xl border border-slate-100 flex justify-center items-center min-h-100">
+        <p className="text-slate-500 animate-pulse font-medium">
+          Carregando seu painel personalizado...
+        </p>
+      </div>
+    );
+  }
 
 
   if (erro) {
@@ -145,9 +173,7 @@ function Dashboard() {
     );
   }
 
-
   if (!data) return null;
-
 
   return (
     <div className="w-full max-w-6xl flex flex-col gap-10 p-4 md:p-0">
@@ -166,15 +192,11 @@ function Dashboard() {
         </p>
       </div>
 
-
-
       <div className="flex flex-col gap-4">
 
-        <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
+        <h2 className="text-lg font-bold text-slate-200">
           🌤️ Clima e Tempo nas Cidades Selecionadas
-
         </h2>
-
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -196,20 +218,13 @@ function Dashboard() {
           />
 
         </div>
-
-
-
       </div>
-
-
-
 
       <div className="flex flex-col gap-4">
 
-        <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
+        <h2 className="text-lg font-bold text-slate-200">
           💼 Cotações e Tendências de Mercado
         </h2>
-
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -221,10 +236,7 @@ function Dashboard() {
           ))}
 
         </div>
-
       </div>
-
-
 
       <GeradorInsight
         textoIA={data.insight}
