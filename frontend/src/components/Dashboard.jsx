@@ -239,7 +239,7 @@ function Dashboard() {
         className="flex flex-col gap-4"
       >
         <h2 className="text-lg font-bold text-slate-200">
-          🌤️ Clima e Tempo nas Cidades Selecionadas
+          🌤️ Clima e Tempo na Cidade Selecionada
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {data.cidades.map((cidade) => (
