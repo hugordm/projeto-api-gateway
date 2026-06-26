@@ -9,9 +9,7 @@ export default function Calendar({ onRangeChange }) {
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
-    fetch(
-      `https://brasilapi.com.br/api/feriados/v1/${currentDate.getFullYear()}`,
-    )
+    fetch(`${import.meta.env.VITE_API_URL}/api/calendario?ano=${currentDate.getFullYear()}`)
       .then((r) => r.json())
       .then(setHolidays)
       .catch(console.error);
